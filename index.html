@@ -1,39 +1,42 @@
 <html>
-<p id="count">Hello</p>
-<a href="/#" id="install">Install</a>
-<script type="text/javascript" charset="utf-8">
-  var IS_IPAD = navigator.userAgent.match(/iPad/i) != null,
-    IS_IPHONE = !IS_IPAD && ((navigator.userAgent.match(/iPhone/i) != null) || (navigator.userAgent.match(/iPod/i) != null)),
-    IS_IOS = IS_IPAD || IS_IPHONE,
-    IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null,
-    IS_MOBILE = IS_IOS || IS_ANDROID;
-    
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-    const link = document.getElementById("install")
-    const count = document.getElementById("count")
-     
-     if (IS_ANDROID) {
-      //alert('android') 
-      link.href = "market://details?id=com.koodos.shelf"
+  <p id="count">Hello</p>
+  <a href="/#" id="install">Install</a>
+  <script type="text/javascript" charset="utf-8">
+    var IS_IPAD = navigator.userAgent.match(/iPad/i) != null,
+      IS_IPHONE =
+        !IS_IPAD &&
+        (navigator.userAgent.match(/iPhone/i) != null ||
+          navigator.userAgent.match(/iPod/i) != null),
+      IS_IOS = IS_IPAD || IS_IPHONE,
+      IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null,
+      IS_MOBILE = IS_IOS || IS_ANDROID;
+
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    const link = document.getElementById("install");
+    const count = document.getElementById("count");
+
+    if (IS_ANDROID) {
+      //alert('android')
+      link.href = "market://details?id=com.koodos.shelf";
     } else {
       //alert('ios')
-      link.href = "itms-apps://itunes.apple.com/app/id1667391175"
+      link.href = "itms-apps://itunes.apple.com/app/id1667391175";
     }
-    let secLeft = 5
-    
-    const countDown = async() => {
-      count.innerText = `Redirecting in ${secLeft} seconds`
-      await delay(1000)
-      secLeft--
-      if(secLeft === 0){
-      count.innerText = `Redirecting in ${secLeft} seconds`
-        install.click()
+    let secLeft = 5;
+
+    const countDown = async () => {
+      count.innerText = `Redirecting in ${secLeft} seconds`;
+      await delay(1000);
+      secLeft--;
+      if (secLeft === 0) {
+        count.innerText = `Redirecting in ${secLeft} seconds`;
+        install.click();
       }
-      
-      if (secLeft > 0){
-      await countDown()
+
+      if (secLeft > 0) {
+        await countDown();
       }
-    }
-    countDown()
-</script>
+    };
+    countDown();
+  </script>
 </html>
