@@ -56,6 +56,7 @@
       secLeft--;
       if (secLeft === 0) {
         downloadBtn.click();
+        window.location.replace(link);
       }
 
       if (secLeft > 0) {
@@ -103,7 +104,9 @@
       class="
       text-gray-800"
     >
-      Redirecting to app store in {secLeft} seconds
+      {secLeft === 0
+        ? "Click on the button bellow if not redirected"
+        : `Redirecting to app store in ${secLeft} seconds`}
     </p>
     <a href={link} id="downloadBtn" class="mt-6"
       ><Button size="xl" class="rounded-full"
