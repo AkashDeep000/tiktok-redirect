@@ -14,52 +14,53 @@
     PUBLIC_SECONDERY_BTN_TEXT,
   } = env;
   let secLeft = PUBLIC_COUNTDOWN || 3;
-  let link =
-    "https://play.google.com/store/apps/details?id=" + PUBLIC_GOOGLE_ID ||
-    "com.koodos.shelf";
+  let googleLink =
+    "https://play.google.com/store/apps/details?id=" +
+    (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
+  let googleIntent =
+    "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
+  let appleLink =
+    "https://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
+  let appleIntent =
+    "itms-apps://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
+  let link = "#";
 
   onMount(() => {
-    const IS_IPAD = navigator.userAgent.match(/iPad/i) != null,
-      IS_MAC = navigator.userAgent.match(/Mac/i) != null,
-      IS_IPHONE =
-        !IS_IPAD &&
-        (navigator.userAgent.match(/iPhone/i) != null ||
-          navigator.userAgent.match(/iPod/i) != null),
-      IS_IOS = IS_IPAD || IS_IPHONE,
-      IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null,
-      IS_MOBILE = IS_IOS || IS_ANDROID;
+    const IS_IOS =
+      !!navigator.userAgent && /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const IS_MAC = navigator.userAgent.match(/Mac/i) != null;
+
+    const IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null;
+
+    if (IS_IOS || IS_MAC) {
+      link = appleLink;
+    } else {
+      link = googleLink;
+    }
 
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-    const downloadBtn = document.getElementById("downloadBtn");
 
-    if (IS_ANDROID) {
-      //alert('android')
-      link = "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
-    } else if (IS_IOS) {
-      //alert('ios')
-      link =
-        "itms-apps://itunes.apple.com/app/" +
-        (PUBLIC_APPLE_ID || "id1667391175");
-    } else if (IS_MAC) {
-      //alert("mac")
-      link =
-        "https://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
-    } else {
-      //alert("other/win")
-      link =
-        "https://play.google.com/store/apps/details?id=" + PUBLIC_GOOGLE_ID ||
-        "com.koodos.shelf";
-    }
+    const downloadBtn = document.getElementById("downloadBtn");
 
     const countDown = async () => {
       await delay(1000);
       secLeft--;
       if (secLeft === 0) {
-        downloadBtn.click();
-        window.location.replace(link);
+        if (IS_IOS) {
+          downloadBtn.href = appleIntent;
+          downloadBtn.click();
+          await delay(200);
+          downloadBtn.href = appleLink;
+          downloadBtn.click();
+        } else {
+          downloadBtn.href = googleIntent;
+          downloadBtn.click();
+          await delay(200);
+          downloadBtn.href = googleLink;
+          downloadBtn.click();
+        }
       }
-
-      if (secLeft > 0) {
+      if (secLeft >= 0) {
         await countDown();
       }
     };
@@ -104,8 +105,10 @@
       class="
       text-gray-800"
     >
-      {secLeft === 0
+      {secLeft === -1
         ? "Click on the button bellow if not redirected"
+        : secLeft === 0
+        ? "Redirecting to app store..."
         : `Redirecting to app store in ${secLeft} seconds`}
     </p>
     <a href={link} id="downloadBtn" class="mt-6"
