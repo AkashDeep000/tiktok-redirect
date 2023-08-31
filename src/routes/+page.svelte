@@ -49,13 +49,13 @@
         if (IS_IOS) {
           downloadBtn.href = appleIntent;
           downloadBtn.click();
-          await delay(200);
+          await delay(20);
           downloadBtn.href = appleLink;
           downloadBtn.click();
         } else {
           downloadBtn.href = googleIntent;
           downloadBtn.click();
-          await delay(200);
+          await delay(20);
           downloadBtn.href = googleLink;
           downloadBtn.click();
         }
