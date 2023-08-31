@@ -20,9 +20,9 @@
   let googleIntent =
     "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
   let appleLink =
-    "https://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
+    "https://apps.apple.com/us/app/" + (PUBLIC_APPLE_ID || "id1667391175");
   let appleIntent =
-    "itms-apps://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
+    "itms-apps://apps.apple.com/us/app/" + (PUBLIC_APPLE_ID || "id1667391175");
   let link = "#";
 
   onMount(() => {
