@@ -46,10 +46,12 @@
       await delay(1000);
       secLeft--;
       if (secLeft === 0) {
-        if (IS_IOS) {
-          downloadBtn.href = appleIntent;
-          downloadBtn.click();
-          await delay(20);
+        if (IS_IOS || IS_MAC) {
+          if (IS_IOS) {
+            downloadBtn.href = appleIntent;
+            downloadBtn.click();
+            await delay(20);
+          }
           downloadBtn.href = appleLink;
           downloadBtn.click();
         } else {
