@@ -28,7 +28,7 @@
   onMount(() => {
     const IS_IOS =
       !!navigator.userAgent && /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const IS_MAC = navigator.userAgent.match(/Mac/i) != null;
+    const IS_MAC = !!navigator.userAgent && /Mac/.test(navigator.userAgent);
 
     const IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null;
 
