@@ -5,7 +5,7 @@
   import { env } from "$env/dynamic/public";
   const {
     PUBLIC_GOOGLE_ID,
-    PUBLIC_APPLE_ID,
+    PUBLIC_APPLE_LINK,
     PUBLIC_APP_NAME,
     PUBLIC_APP_TITLE,
     PUBLIC_APP_DEVELOPER,
@@ -20,9 +20,9 @@
   let googleIntent =
     "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
   let appleLink =
-    "https://apps.apple.com/us/app/" + (PUBLIC_APPLE_ID || "id1667391175");
-  let appleIntent =
-    "itms-apps://apps.apple.com/us/app/" + (PUBLIC_APPLE_ID || "id1667391175");
+    PUBLIC_APPLE_LINK ||
+    "https://apps.apple.com/us/app/shelf-whats-on-yours/id1667391175?itsct=apps_box_link&itscg=30200";
+
   let link = "#";
 
   onMount(() => {
@@ -47,19 +47,21 @@
       secLeft--;
       if (secLeft === 0) {
         if (IS_IOS || IS_MAC) {
+          link = appleLink;
           if (IS_IOS) {
-            downloadBtn.href = appleIntent;
+            const linkFrame = document.getElementById("linkFrame");
+            linkFrame.src = appleLink;
+            await delay(20);
+            document.body.removeChild(linkFrame);
             downloadBtn.click();
             await delay(20);
           }
-          downloadBtn.href = appleLink;
-          downloadBtn.click();
         } else {
-          downloadBtn.href = googleIntent;
+          link = googleIntent;
+          await delay(20);
           downloadBtn.click();
           await delay(20);
-          downloadBtn.href = googleLink;
-          downloadBtn.click();
+          link = googleLink;
         }
       }
       if (secLeft >= 0) {
@@ -75,7 +77,7 @@
     <NavBrand class="text-2xl font-bold italic text-white rounded-lg" href="/"
       >{PUBLIC_APP_NAME || "shelf"}</NavBrand
     >
-    <a href={link}>
+    <a href={link} alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}>
       <Button class="rounded-full"
         >{PUBLIC_SECONDERY_BTN_TEXT || "Install"}</Button
       >
@@ -113,7 +115,13 @@
         ? "Redirecting to app store..."
         : `Redirecting to app store in ${secLeft} seconds`}
     </p>
-    <a href={link} id="downloadBtn" class="mt-6"
+    <iframe id="linkFrame" width="1" height="1" style="visibility:hidden"
+    ></iframe>
+    <a
+      href={link}
+      id="downloadBtn"
+      class="mt-6"
+      alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}
       ><Button size="xl" class="rounded-full"
         >{PUBLIC_MAIN_BTN_TEXT || "Open App Store"}</Button
       ></a
