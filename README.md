@@ -1,3 +1,36 @@
+###Open
+```
+itms-apps://itunes.apple.com
+```
+
+###Open account settings
+```
+itms-ui://
+```
+
+###Open specific app
+```
+itms-apps://itunes.apple.com/app/id
+```
+
+###Search
+```
+itms-apps://search.itunes.apple.com/WebObjects/MZSearch.woa/wa/search?media=software&term=YourQuery
+```
+
+###Top charts
+```
+itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewTop?genreId=36&popId=30
+```
+###Results in 'Cannot Connect' error when used alone
+```
+itms-apps://
+itms-appss://
+macappstore://
+macappstores://
+itms-watch://
+```
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
