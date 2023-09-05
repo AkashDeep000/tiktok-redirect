@@ -3,85 +3,99 @@
   import { onMount } from "svelte";
   import { Navbar, NavBrand, Button, Card } from "flowbite-svelte";
   import { env } from "$env/dynamic/public";
+
   const {
-  PUBLIC_GOOGLE_ID,
-  PUBLIC_APPLE_ID,
-  PUBLIC_APP_NAME,
-  PUBLIC_APP_TITLE,
-  PUBLIC_APP_DEVELOPER,
-  PUBLIC_COUNTDOWN,
-  PUBLIC_MAIN_BTN_TEXT,
-  PUBLIC_SECONDERY_BTN_TEXT,
+    PUBLIC_GOOGLE_ID,
+    PUBLIC_APPLE_ID,
+    PUBLIC_APP_NAME,
+    PUBLIC_APP_TITLE,
+    PUBLIC_APP_DEVELOPER,
+    PUBLIC_COUNTDOWN,
+    PUBLIC_MAIN_BTN_TEXT,
+    PUBLIC_SECONDERY_BTN_TEXT,
   } = env;
+
   let secLeft = PUBLIC_COUNTDOWN || 3;
   let googleLink =
-  "https://play.google.com/store/apps/details?id=" +
-  (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
+    "https://play.google.com/store/apps/details?id=" +
+    (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
   let googleIntent =
-  "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
-  let appleLink = "https://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175")
+    "market://details?id=" + (PUBLIC_GOOGLE_ID || "com.koodos.shelf");
+  let appleLink =
+    "https://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175");
   let appleIntents = [
-  "itms-apps://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175"),
-  "itms-appss://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175"),
-  "itms-watch://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175")
-  ]
+    "itms-apps://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175"),
+    "itms-appss://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175"),
+    "itms-watch://itunes.apple.com/app/" + (PUBLIC_APPLE_ID || "id1667391175"),
+  ];
   let link = "#";
-
-  onMount(() => {
-  const IS_IOS =
-  !!navigator.userAgent && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const IS_MAC = !!navigator.userAgent && /Mac/.test(navigator.userAgent);
-
-  const IS_ANDROID = !IS_IOS && navigator.userAgent.match(/android/i) != null;
-
-  if (IS_IOS || IS_MAC) {
-  link = appleLink;
-  } else {
-  link = googleLink;
-  }
+  let IS_MAC, IS_IOS, IS_ANDROID;
 
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-  const downloadBtn = document.getElementById("downloadBtn");
-
-  const countDown = async () => {
-  await delay(1000);
-  secLeft--;
-  if (secLeft === 0) {
-  if (IS_IOS || IS_MAC) {
-  link = appleLink
-  if (IS_IOS){
-  /* const linkFrame = document.getElementById("linkFrame")
-  linkFrame.src = appleLink
-  await delay(20)
-  document.body.removeChild(linkFrame)
-  */
-  link = appleIntents[0]
-  await delay(20)
-  downloadBtn.click();
-  link = appleIntents[1]
-  await delay(20)
-  downloadBtn.click();
-  link = appleIntents[2]
-  await delay(20)
-downloadBtn.click();
-  link = appleLink
-  await delay(20);
-  downloadBtn.click();
-  }
-  } else {
-  link = googleIntent;
-  await delay(20);
-  downloadBtn.click();
-  await delay(20);
-  link = googleLink;
-  }
-  }
-  if (secLeft >= 0) {
-  await countDown();
+  const handleApple = async () => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = appleIntents[0];
+    a.click();
+    await delay(20);
+    a.href = appleIntents[1];
+    a.click();
+    await delay(20);
+    a.href = appleIntents[2];
+    a.click();
+    await delay(20);
+    a.href = appleLink;
+    a.click();
   };
-  }
-  countDown();
+
+  const handleOthers = async () => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = googleIntent;
+    a.click();
+    await delay(20);
+    a.href = googleLink;
+    //  a.click();
+  };
+
+  const handleRedirect = async () => {
+    if (IS_IOS || IS_MAC) {
+      await handleApple();
+    } else {
+      await handleOthers();
+    }
+  };
+
+  onMount(async () => {
+    IS_IOS =
+      !!navigator.userAgent && /iPad|iPhone|iPod/.test(navigator.userAgent);
+    IS_MAC =
+      !IS_IOS && !!navigator.userAgent && /Mac/.test(navigator.userAgent);
+    IS_ANDROID =
+      !!navigator.userAgent && !IS_IOS && /android/.test(navigator.userAgent);
+
+    if (IS_MAC) {
+      link = appleLink;
+    } else if (IS_IOS) {
+      link = appleIntents[0];
+    } else if (IS_ANDROID) {
+      link = googleIntent;
+    } else {
+      link = googleLink;
+    }
+
+    const countDown = async () => {
+      await delay(1000);
+      secLeft--;
+      if (secLeft === 0) {
+        await handleRedirect();
+      }
+      if (secLeft >= 0) {
+        await countDown();
+      }
+    };
+    countDown();
   });
 </script>
 
@@ -90,17 +104,21 @@ downloadBtn.click();
     <NavBrand class="text-2xl font-bold italic text-white rounded-lg" href="/"
       >{PUBLIC_APP_NAME || "shelf"}</NavBrand
     >
-    <a href={link} alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}>
+    <a
+      on:click={handleRedirect}
+      href={link}
+      alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}
+    >
       <Button class="rounded-full"
         >{PUBLIC_SECONDERY_BTN_TEXT || "Install"}</Button
       >
     </a>
   </Navbar>
-  <div class="h-full grid place-items-center content-center gap-4 pb-[12rem]">
-    <Card class="grid grid-cols-[auto_1fr] gap-2 mb-6">
+  <div class="h-full grid place-items-center content-center gap-12 pb-[12rem]">
+    <Card class="grid grid-cols-[auto_1fr] gap-2">
       <div
-        class="aspect-square bg-indigo-700 text-white italic text-xl font-bold rounded-lg p-3 grid place-items-center"
-        >
+        class="aspect-square w-fit bg-indigo-700 text-white italic text-xl font-bold rounded-lg p-3 grid place-items-center"
+      >
         {PUBLIC_APP_NAME || "shelf"}
       </div>
       <div class="p-2">
@@ -115,21 +133,24 @@ downloadBtn.click();
     <p
       class="text-3xl
       text-gray-800"
-      >
+    >
       App Store
     </p>
     <p
       class="
-      text-gray-800"
-      >
+      text-gray-800 px-5 text-center"
+    >
       {secLeft === -1
-      ? "Click on the button bellow if not redirected"
-      : secLeft === 0
-      ? "Redirecting to app store..."
-      : `Redirecting to app store in ${secLeft} seconds`}
+        ? `If you're not redirected, try to open this page in your browser or search the app store for "Shelf"`
+        : secLeft === 0
+        ? "Redirecting to app store..."
+        : `Redirecting to app store in ${secLeft} seconds`}
     </p>
-    <iframe id="linkFrame" width="1" height="1" style="visibility:hidden"></iframe>
-    <a href={link} id="downloadBtn" class="mt-6" alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}
+    <a
+      on:click={handleRedirect}
+      href={link}
+      class=""
+      alt={PUBLIC_APP_TITLE || "Shelf — what’s on yours?"}
       ><Button size="xl" class="rounded-full"
         >{PUBLIC_MAIN_BTN_TEXT || "Open App Store"}</Button
       ></a

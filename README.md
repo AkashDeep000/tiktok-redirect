@@ -1,28 +1,49 @@
+##Environment variable
+
+```
+  PUBLIC_GOOGLE_ID
+  PUBLIC_APPLE_ID
+  PUBLIC_APP_NAME
+  PUBLIC_APP_TITLE
+  PUBLIC_APP_DEVELOPER
+  PUBLIC_COUNTDOWN
+  PUBLIC_MAIN_BTN_TEXT
+  PUBLIC_SECONDERY_BTN_TEXT
+```
+
+##Apple appstore intents for future reference
 ###Open
+
 ```
 itms-apps://itunes.apple.com
 ```
 
 ###Open account settings
+
 ```
 itms-ui://
 ```
 
 ###Open specific app
+
 ```
 itms-apps://itunes.apple.com/app/id
 ```
 
 ###Search
+
 ```
 itms-apps://search.itunes.apple.com/WebObjects/MZSearch.woa/wa/search?media=software&term=YourQuery
 ```
 
 ###Top charts
+
 ```
 itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewTop?genreId=36&popId=30
 ```
+
 ###Results in 'Cannot Connect' error when used alone
+
 ```
 itms-apps://
 itms-appss://
