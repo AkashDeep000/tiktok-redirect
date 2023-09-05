@@ -12,6 +12,7 @@
 ```
 
 ## Apple appstore intents for future reference
+
 ### Open
 
 ```

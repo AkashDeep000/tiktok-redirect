@@ -73,7 +73,10 @@
     IS_MAC =
       !IS_IOS && !!navigator.userAgent && /Mac/.test(navigator.userAgent);
     IS_ANDROID =
-      !!navigator.userAgent && !IS_IOS && /android/.test(navigator.userAgent);
+      !IS_IOS &&
+      !IS_MAC &&
+      !!navigator.userAgent &&
+      /android/i.test(navigator.userAgent);
 
     if (IS_MAC) {
       link = appleLink;
