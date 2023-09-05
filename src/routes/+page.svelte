@@ -56,7 +56,7 @@
     a.click();
     await delay(20);
     a.href = googleLink;
-    //  a.click();
+    a.click();
   };
 
   const handleRedirect = async () => {
