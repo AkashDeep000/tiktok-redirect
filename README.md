@@ -1,4 +1,4 @@
-##Environment variable
+## Environment variable
 
 ```
   PUBLIC_GOOGLE_ID
@@ -11,38 +11,38 @@
   PUBLIC_SECONDERY_BTN_TEXT
 ```
 
-##Apple appstore intents for future reference
-###Open
+## Apple appstore intents for future reference
+### Open
 
 ```
 itms-apps://itunes.apple.com
 ```
 
-###Open account settings
+### Open account settings
 
 ```
 itms-ui://
 ```
 
-###Open specific app
+### Open specific app
 
 ```
 itms-apps://itunes.apple.com/app/id
 ```
 
-###Search
+### Search
 
 ```
 itms-apps://search.itunes.apple.com/WebObjects/MZSearch.woa/wa/search?media=software&term=YourQuery
 ```
 
-###Top charts
+### Top charts
 
 ```
 itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewTop?genreId=36&popId=30
 ```
 
-###Results in 'Cannot Connect' error when used alone
+### Results in 'Cannot Connect' error when used alone
 
 ```
 itms-apps://
